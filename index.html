@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<!-- define angular app -->
+<html ng-app="dataApp">
+
+<head>
+  <!-- SCROLLS -->
+  <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
+  <link rel="stylesheet" href="bootstrap/font-awesome.css" />
+
+  <!-- SPELLS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
+
+  <!-- defined customized services for controllers -->
+  <script src="services/page1.js"></script>
+  <script src="services/page2.js"></script>
+  <script src="services/page3.js"></script>
+  <script src="script.js"></script>
+
+  <!-- Setting for relative links -->
+  <meta charset="utf-8">
+  <base href="/">
+</head>
+
+<!-- define angular controller -->
+<body ng-controller="page1Controller">
+
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">AngularJS-D3 Interactive Data Chart with Elasticsearch API (&Kibana Plugin)</a>
+      </div>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><i class="fa fa-home"></i> Page 1</a></li>
+        <li><a href="#page2"><i class="fa fa-shield"></i> Page 2</a></li>
+        <li><a href="#page3"><i class="fa fa-comment"></i> Page 3</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div id="main">
+  
+    <!-- angular templating, includes the template of the current route -->
+		<!-- this is where content will be injected -->
+    <div ng-view></div>
+    
+  </div>
+  
+</body>
+
+</html>
