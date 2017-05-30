@@ -1,5 +1,5 @@
 	// create the module and name it app
-	var app = angular.module('dataApp', ['ngRoute', 'ngResource']);
+	var app = angular.module('dataApp', ['ngRoute', 'ngResource', 'smart-table']); // Register smart-table as a module
 
 	// configure our routes
 	app.config(function($routeProvider, $locationProvider) {
