@@ -1,3 +1,10 @@
-	var page3 = function($scope, $resource) {
-		$scope.message = 'Contact us! JK. This is just a demo.';
-	};
+	var page3 = function($scope, $resource, $http, es) {
+  
+    es.cluster.stats({
+    }).then(function(response){
+      $scope.message = JSON.stringify(response);
+      console.log($scope.message);
+    });
+
+ };
+

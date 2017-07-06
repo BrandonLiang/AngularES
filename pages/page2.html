@@ -1,5 +1,16 @@
-<div class="jumbotron text-center">
+<div class="jumbotron float-center">
 	<h1>Page 2</h1>
+  <form name="Interactive"> 
+    <input type="text" placeholder="type" ng-model="typee" />
+    <input type="text" placeholder="User" ng-model="user" />
+    <input type="text" placeholder="Original User/Web" ng-model="original" />
+    <input type="float" placeholder="Neutral Score" ng-model="neutral" />
+    <input type="float" placeholder="Compound Score" ng-model="compound" />
+    <input type="float" placeholder="Positive Score" ng-model="positive" />
+    <input type="float" placeholder="Negative Score" ng-model="negative" />
+    <input type="text" placeholder="Tweet" ng-model="tweet" />
+    <input type="submit" value="add" ng-click="add(typee, user, original, neutral, compound, positive, negative, tweet)" />
+  </form>
 	
 	<p>{{ message }}</p>
 </div>

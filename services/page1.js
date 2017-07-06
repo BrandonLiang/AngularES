@@ -1,25 +1,60 @@
-	var page1 = function($scope, $resource, $http) {
-    var prefix = "http://stats.nba.com/stats/playbyplayv2?EndPeriod=10&EndRange=55800&GameID=",
-        end = "&RangeType=2&Season=2015-16&SeasonType=Regular+Season&StartPeriod=1&StartRange=0";
+	var page1 = function($scope, $resource, $http, es) {
+      
+    //es.search({
+    //  index: "twitter_network_sentiment",
+    //  //type: "hillary_before",
+    //  size: 500
+    //  //body: {
+    //  //  "query":
+    //  //    {
+    //  //      "match": {
+    //  //        Tweet:"Trump"
+    //  //      }
+    //  //    },
+    //  //}
+    //}).then(function (response) {
+    //  $scope.tweets = response.hits.hits;
+    //});
 
-    var page1Complete = function(response) {
-      $scope.plays = response.data.resultSets[0].rowSet;
+    es.cat.indices({
+      h:['index', 'docs.count']
+    }).then(function(response){
+      let lines = response.split('\n');
+      let indices = lines.map(function(line){
+        let row = line.split(' ');
+        //return {name: row[0], count: row[1]};
+        return row[0];
+      });
+      $scope.indices = indices;
+    });
+
+    $scope.searchIndex = function(indexx){
+      es.search(
+          {
+        index: indexx,
+        size: 5000
+      }
+      ).then(function (response) {
+        let h = response.hits.hits;
+        let types = new Set();
+        for (hit in h){
+          if (!(types.has(h[hit]._type))){
+            types.add(h[hit]._type);
+          }
+        }
+        $scope.types = Array.from(types);
+        //console.log($scope.types);
+      });
     };
 
-    var onError = function(reason) {
-      $scope.error = "Could not reach the url";
+    $scope.search = function(indexx, type){
+      es.search({
+        index: indexx,
+        type: type,
+        size: 500
+      }).then(function (response) {
+        $scope.tweets = response.hits.hits;
+      });
     };
+};
 
-    $scope.search = function(season, game){
-      season_str = 200 + season;
-      game_str = 10000 + game;
-      var url = prefix + "00" + season_str.toString() + "0" + game_str.toString().substring(1,5) + end;
-      $http.get(url).then(page1Complete, onError);
-    };
-
-    $scope.searchPeriod = '';
-    $scope.season = 16;
-    $scope.game = 1230;
-
-    $scope.sortOrder = "-PLAYER1_NAME";
-	};

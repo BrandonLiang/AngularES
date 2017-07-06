@@ -1,0 +1,55 @@
+#!/bin/bash -ex
+ 
+file="master/thd/thd.bsv"
+host="node04.tresata.com"
+port=9200
+index="master_thd"
+docType="master"
+id="iid"
+  
+# delete index if present otherwise go to next step - comment this out if you do not want to delete your index
+curl -k -u tresata:admin -f -XDELETE "https://${host}:${port}/${index}?pretty" || echo "${index} not found"
+   
+# create index
+curl -k -XPOST "https://tresata:admin@${host}:${port}/${index}?pretty" -d '
+{
+    "settings" : {
+        "index" : {
+            "number_of_replicas" : 0,
+            "refresh_interval" : -1,
+            "number_of_shards" : 2,
+            "_id" : { "path" : "'${id}'" },
+            "translog.durability" : "async"
+        }
+     },
+     "mappings" : {
+         "'${docType}'" : {
+               "properties" : {
+                   "pkey" : { "type" : "string", "store" : false, "index": "not_analyzed" },
+                   "tresataId__default" : { "type": "string", "store": false, "index": "not_analyzed" },
+                   "tresataId__default_a": { "type": "String", "store": false, "index": "not_analyzed" },
+                   "tresataId__default_b": { "type": "String", "store": false, "index": "not_analyzed" },
+                   "source": { "type": "String", "store": false, "index": "not_analyzed" },
+                   "default_street": { "type": "String", "store": false, "index": "not_analyzed" },
+                   "default_city": { "type": "String", "store": false, "index": "not_analyzed" },
+                   "default_zip": { "type": "String", "store": false, "index": "not_analyzed" },
+                   "default_state": { "type": "String", "store": false, "index": "not_analyzed" },
+                   "default_brand": { "type": "String", "store": false, "index": "not_analyzed" },
+                   "default_firstName": { "type": "String", "store": false, "index": "not_analyzed" },
+                   "default_lastName": { "type": "String", "store": false, "index": "not_analyzed" },
+                   "default_phoneNumber": { "type": "String", "store": false, "index": "not_analyzed" },
+                   "default_country": { "type": "String", "store": false, "index": "not_analyzed" },
+                   "default_purchase_date": { "type": "date", "format": "yyyy-MM-dd" },
+                   "default_serialNumber": { "type": "String", "store": false, "index": "not_analyzed" },
+                   "default_source_canonical": { "type": "String", "store": false, "index": "not_analyzed" }
+               }
+          }
+     }
+}'
+    
+# load index
+export MAPRED_PARAMS="-D es.net.http.auth.user=tresata -D es.net.http.auth.pass=admin -D es.net.ssl=true -D es.net.ssl.cert.allow.all=true $MAPRED_PARAMS"
+/usr/local/lib/tresata-tools/bin/hdfs-to-es --hdfs --input bsv%${file} --host ${host} --port ${port} --index ${index} --docType ${docType} #--id ${id}
+     
+# optimize
+curl -k -XPOST "https://tresata:admin@${host}:${port}/${index}/_optimize?max_num_segments=1&pretty"

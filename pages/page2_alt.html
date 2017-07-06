@@ -1,0 +1,33 @@
+<!--
+<div>
+	<h1>Page 2</h1>
+  <div> {{error}} </div>
+  <form name="searchSeason">
+    <input type="search" placeholder="indx to find" ng-model="search" />
+    <input type="submit" value="Search" ng-click="search(index)" />  
+  </form>
+  
+  <form name="filterSession"> 
+    <input type="search" placeholder="filter" ng-model="f" />
+  </form>
+
+  <table class="table table-striped" ng-repeat="row in rows"> <!--Better Looking-->
+    <thread>
+      <tr>
+        <th ng-repeat="column in row.cols">{{column}}</th>
+      </tr>
+    </thread>
+    <tbody>
+      <!-- use "-" in orderBy for descending order -->
+      <tr ng-repeat="play in plays | filter:f">
+       <td> {{play[32]}} </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+-->
+<div class="jumbotron text-center">
+	<h1>Page 2</h1>
+	
+	<p>{{ message }}</p>
+</div>

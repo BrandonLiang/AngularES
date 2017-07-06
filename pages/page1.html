@@ -1,56 +1,47 @@
 <div>
 	<h1>Page 1</h1>
   <div> {{error}} </div>
-  <form name="searchSeason">
-    <input type="number" placeholder="Season to find" ng-model="season" />
-    <input type="number" placeholder="Game to find" ng-model="game" />
-    <input type="submit" value="Search" ng-click="search(season, game)" />  
-  </form>
-  
-  <form name="filterSession"> 
-    <input type="search" placeholder="Period" ng-model="f[4]" />
-    <input type="search" placeholder="Score Margin" ng-model="f[11]" />
-    <input type="search" placeholder="Player 1" ng-model="f[14]" />
-    <input type="search" placeholder="Player 1 Team" ng-model="f[18]" />
-    <input type="search" placeholder="Player 2" ng-model="f[21]" />
-    <input type="search" placeholder="Player 2 Team" ng-model="f[25]" />
-    <input type="search" placeholder="Player 3" ng-model="f[28]" />
-    <input type="search" placeholder="Player 3 Team" ng-model="f[32]" />
-  </form>
+      <!-- 
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Choose Index
+          <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <li ng-repeat="indexx in indices"><a ng-model="indexx.name"> {{indexx.name}} </a></li>
+      </ul>
+      </div>
+      -->
+      <select ng-model="indexx"  ng-click="searchIndex(indexx)" ng-options="indexx for indexx in indices"><option value="">Choose Index</option></select>
+      <select ng-model="type" ng-click="search(indexx, type)" ng-options="type for type in types"><option value="">Choose Type</option></select>
+    <input type="text" placeholder="User" ng-model="f._source.User" />
+    <input type="text" placeholder="Original User/Web" ng-model='f._source["Original_User/Web"]' />
+    <input type="text" placeholder="Tweet" ng-model="f._source.Tweet" />
 
   <table class="table table-striped"> <!--Better Looking-->
     <thread>
       <tr>
-        <th>Period</th>
-        <th>Time Left</th>
-        <th>Home</th>
-        <th>Visitor</th>
-        <th>Score</th>
-        <th>Score Margin</th>
-        <th>Player 1</th>
-        <th>Player 1 Team</th>
-        <th>Player 2</th>
-        <th>Player 2 Team</th>
-        <th>Player 3</th>
-        <th>Player 3 Team</th>
+        <th>Index</th>
+        <th>Type</th>
+        <th>User</th>
+        <th>Original User/Web</th>
+        <th>Neutral</th>
+        <th>Compound</th>
+        <th>Positive</th>
+        <th>Negative</th>
+        <th>Tweet</th>
       </tr>
     </thread>
     <tbody>
       <!-- use "-" in orderBy for descending order -->
-      <tr ng-repeat="play in plays | filter:f">
-        {{play}}
-        <td> {{play[4]}} </td>
-        <td> {{play[6]}} </td>
-        <td> {{play[7]}} </td>
-        <td> {{play[9]}} </td>
-        <td> {{play[10]}} </td>
-        <td> {{play[11]}} </td>
-        <td> {{play[14]}} </td>
-        <td> {{play[18]}} </td>
-        <td> {{play[21]}} </td>
-        <td> {{play[25]}} </td>
-        <td> {{play[28]}} </td>
-        <td> {{play[32]}} </td>
+      <tr ng-repeat="tweet in tweets | filter: f">
+        <td> {{tweet._index}} </td>
+        <td> {{tweet._type}} </td>
+        <td> {{tweet._source.User}} </td>
+        <td> {{tweet._source["Original_User/Web"]}} </td>
+        <td> {{tweet._source.Neutral}} </td>
+        <td> {{tweet._source.Compound}} </td>
+        <td> {{tweet._source.Positive}} </td>
+        <td> {{tweet._source.Negative}} </td>
+        <td> {{tweet._source.Tweet}} </td>
       </tr>
     </tbody>
   </table>
